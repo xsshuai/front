@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 引入样式 -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <el-table :data="userList" style="width: 100%" border stripe>
+        <el-table-column type="selection" width="55"> </el-table-column>
+        <el-table-column type="index" width="50"> </el-table-column>
+        <el-table-column prop="name" label="姓名" width="180">
+        </el-table-column>
+        <el-table-column prop="age" label="年龄" width="180"> </el-table-column>
+        <el-table-column prop="email" label="邮箱"> </el-table-column>
+      </el-table>
+    </div>
+    <script src="vue.js"></script>
+    <script src="axios.js"></script>
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script>
+      //提取请求URL
+      const request = axios.create({
+        baseURL: 'http://localhost:8080', //主机地址
+        timeout: 1000, //超时时间
+        headers: {
+          token: 'xss123',
+        },
+      })
+      new Vue({
+        el: '#app', //使用css3选择器语法指定element元素
+        data() {
+          return {
+            userList: [],
+          }
+        },
+        created() {
+          this.showUserList()
+        },
+        methods: {
+          showUserList() {
+            //通过axios访问远程接口
+            request
+              .get('/user/list')
+              .then((response) => {
+                console.log('2、数据获取成功！', response)
+                this.userList = response.data
+              })
+              .catch((error) => {
+                console.log('2、数据获取失败！', error)
+              })
+          },
+        },
+      })
+    </script>
+  </body>
+</html>
